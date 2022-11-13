@@ -19,12 +19,12 @@ namespace BeanSCeneWebAPI.Controllers
 {
     [BasicAuthentication]
     //[EnableCors(origins:"*",headers:"*",methods:"*")]
-    public class ProductsController : ApiController
+    public class ItemsController : ApiController
     {
         MongoClient client;
         string dbName;
         string connString;
-        public ProductsController()
+        public ItemsController()
         {
             // capture connection string of name BeanSceneConn
             connString = ConfigurationManager.ConnectionStrings["BeanSceneConn"].ConnectionString;
@@ -35,14 +35,14 @@ namespace BeanSCeneWebAPI.Controllers
 
         }
         /// <summary>
-        /// method used to get the products
+        /// method used to get the Items
         /// </summary>
         /// <returns></returns>
 
         // GET api/<controller>
         public HttpResponseMessage Get()
         {
-            var collection = client.GetDatabase(dbName).GetCollection<Product>("Products").AsQueryable();
+            var collection = client.GetDatabase(dbName).GetCollection<Item>("Items").AsQueryable();
             string jsonResult = JsonConvert.SerializeObject(collection);
 
             var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -50,16 +50,16 @@ namespace BeanSCeneWebAPI.Controllers
             return response;
         }
         /// <summary>
-        /// method used to get products based on name
+        /// method used to get Items based on name
         /// </summary>
         /// <param name="value"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        [Route("api/Products/{value}/{name}")]
+        [Route("api/Items/{value}/{name}")]
         public HttpResponseMessage Get(string value, string name)
         {
-            //gets all the products
-            var collection = client.GetDatabase(dbName).GetCollection<Product>("Products");
+            //gets all the Items
+            var collection = client.GetDatabase(dbName).GetCollection<Item>("Items");
 
             var filteredResult = collection.AsQueryable().Where(x => x.name.ToLower().Contains(name)).ToList();
 
@@ -80,29 +80,29 @@ namespace BeanSCeneWebAPI.Controllers
 
         // POST api/<controller>
         //{name}/{price}/{stock}/{description}/{brand}/{category}/{imageUrl}
-        [Route("api/Products/{name}/{price}/{stock}/{description}/{brand}/{category}/{imageUrl}")]
+        [Route("api/Items/{name}/{price}/{stock}/{description}/{brand}/{category}/{imageUrl}")]
         public HttpResponseMessage Post( string name, string price, string stock, string description, string brand, string category, string imageUrl)
         {
             try
             {
-                Product p = new Product();             
-                p.name = name;
-                p.price = price;
-                p.stock = stock;
-                p.description = description;
-                p.brand = brand;
-                p.category = category;
-                p.thumbnail = imageUrl;
+                Item i = new Item();             
+                i.name = name;
+                i.price = price;
+                i.stock = stock;
+                i.description = description;
+                i.brand = brand;
+                i.category = category;
+                i.thumbnail = imageUrl;
 
                 // returns the total count of items
-                int lastProductId =  client.GetDatabase(dbName).GetCollection<Product>("Products").AsQueryable().Count();
+                int lastItemId =  client.GetDatabase(dbName).GetCollection<Item>("Items").AsQueryable().Count();
                 // returns the last item's id and parses to int
                 
-                //int.TryParse(client.GetDatabase(dbName).GetCollection<Product>("Products").AsQueryable().Last().id,out int lastProductId);
+                //int.TryParse(client.GetDatabase(dbName).GetCollection<Item>("Items").AsQueryable().Last().id,out int lastItemId);
                
-                p.id = (lastProductId+1).ToString();
+                i.id = (lastItemId+1).ToString();
 
-                client.GetDatabase(dbName).GetCollection<Product>("Products").InsertOne(p);
+                client.GetDatabase(dbName).GetCollection<Item>("Items").InsertOne(i);
 
 
                 var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -129,24 +129,24 @@ namespace BeanSCeneWebAPI.Controllers
             }
         }
         /// <summary>
-        /// method used to add new product to db
+        /// method used to add new Item to db
         /// method takes obj as param
         /// </summary>
-        /// <param name="p"></param>
+        /// <param name="i"></param>
         /// <returns></returns>
-        //adding a product by passing product object
+        //adding a Item by passing Item object
         // POST api/<controller>
-        [Route("api/Products/addProduct")]
-        public HttpResponseMessage addProduct([FromBody] Product p)
+        [Route("api/Items/addItem")]
+        public HttpResponseMessage addItem([FromBody] Item i)
         {
             try
             {
 
-                int lastProductId = client.GetDatabase(dbName).GetCollection<Product>("Products").AsQueryable().Count();
+                int lastItemId = client.GetDatabase(dbName).GetCollection<Item>("Items").AsQueryable().Count();
 
-                p.id = (lastProductId + 1).ToString();
+                i.id = (lastItemId + 1).ToString();
 
-                client.GetDatabase(dbName).GetCollection<Product>("Products").InsertOne(p);
+                client.GetDatabase(dbName).GetCollection<Item>("Items").InsertOne(i);
 
 
                 var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -171,25 +171,25 @@ namespace BeanSCeneWebAPI.Controllers
         // PUT api/<controller>/5
         //{name}/{price}/{stock}/{description}/{brand}/{category}/{imageUrl}
         //add description between stock and imageurl
-        //[Route("api/Products/{id}")]
+        //[Route("api/Items/{id}")]
         //public HttpResponseMessage Put(string id, string name, string price, string stock, string description, string brand, string category, string imageUrl)
         //{
         //    try
         //    {
-        //        Product p = new Product();
-        //        p.id = id;
-        //        p.name = name;
-        //        p.price = price;
-        //        p.stock = stock;
-        //        p.description = description;
-        //        p.brand = brand;
-        //        p.category = category;
-        //        p.thumbnail = imageUrl;
+        //        Item i = new Item();
+        //        i.id = id;
+        //        i.name = name;
+        //        i.price = price;
+        //        i.stock = stock;
+        //        i.description = description;
+        //        i.brand = brand;
+        //        i.category = category;
+        //        i.thumbnail = imageUrl;
 
-        //        var filter = Builders<Product>.Filter.Eq("id", p.id);
-        //        var update = Builders<Product>.Update.Set("name", p.name).Set("price", p.price).Set("stock", p.stock).Set("description", p.description).Set("brand", p.brand).Set("category", p.category).Set("thumbnail", p.thumbnail);
+        //        var filter = Builders<Item>.Filter.Eq("id", i.id);
+        //        var update = Builders<Item>.Update.Set("name", i.name).Set("price", i.price).Set("stock", i.stock).Set("description", i.description).Set("brand", i.brand).Set("category", i.category).Set("thumbnail", i.thumbnail);
 
-        //        client.GetDatabase(dbName).GetCollection<Product>("Products").UpdateOne(filter, update);
+        //        client.GetDatabase(dbName).GetCollection<Item>("Items").UpdateOne(filter, update);
 
         //        var response = Request.CreateResponse(HttpStatusCode.OK);
 
@@ -215,8 +215,8 @@ namespace BeanSCeneWebAPI.Controllers
         //    }
         //}
         /// <summary>
-        /// method used to update existing product in db
-        /// method takes all details related to product that can be updated
+        /// method used to update existing Item in db
+        /// method takes all details related to Item that can be updated
         /// </summary>
         /// <param name="id"></param>
         /// <param name="name"></param>
@@ -225,26 +225,26 @@ namespace BeanSCeneWebAPI.Controllers
         /// <param name="description"></param>
         /// <param name="imageUrl"></param>
         /// <returns></returns>
-        [Route("api/Products/{id}/{name}/{price}/{stock}/{description}/{imageUrl}")]
+        [Route("api/Items/{id}/{name}/{price}/{stock}/{description}/{imageUrl}")]
         public HttpResponseMessage Put(string id, string name, string price, string stock, string description, string imageUrl)
         {
 
             try
             {
-                Product p = new Product();
-                p.id = id;
-                p.name = name;
-                p.price = price;
-                p.stock = stock;
-                p.description = description;
-                p.thumbnail = imageUrl;
+                Item i = new Item();
+                i.id = id;
+                i.name = name;
+                i.price = price;
+                i.stock = stock;
+                i.description = description;
+                i.thumbnail = imageUrl;
 
 
 
-                var filter = Builders<Product>.Filter.Eq("id", p.id);
-                var update = Builders<Product>.Update.Set("name", p.name).Set("price", p.price).Set("stock", p.stock).Set("description", p.description).Set("thumbnail", p.thumbnail);
+                var filter = Builders<Item>.Filter.Eq("id", i.id);
+                var update = Builders<Item>.Update.Set("name", i.name).Set("price", i.price).Set("stock", i.stock).Set("description", i.description).Set("thumbnail", i.thumbnail);
 
-                client.GetDatabase(dbName).GetCollection<Product>("Products").UpdateOne(filter, update);
+                client.GetDatabase(dbName).GetCollection<Item>("Items").UpdateOne(filter, update);
 
                 var response = Request.CreateResponse(HttpStatusCode.OK);
 
@@ -266,18 +266,18 @@ namespace BeanSCeneWebAPI.Controllers
         }
 
       
-        //updating product by passing product object
-        [Route("api/Products/updateProduct")]
-        public HttpResponseMessage updateProduct([FromBody] Product p)
+        //updating Item by passing Item object
+        [Route("api/Items/updateItem")]
+        public HttpResponseMessage updateItem([FromBody] Item i)
         {
 
             try
             {
 
-                var filter = Builders<Product>.Filter.Eq("id", p.id);
-                var update = Builders<Product>.Update.Set("name", p.name).Set("price", p.price).Set("stock", p.stock).Set("description", p.description).Set("thumbnail", p.thumbnail);
+                var filter = Builders<Item>.Filter.Eq("id", i.id);
+                var update = Builders<Item>.Update.Set("name", i.name).Set("price", i.price).Set("stock", i.stock).Set("description", i.description).Set("thumbnail", i.thumbnail);
 
-                client.GetDatabase(dbName).GetCollection<Product>("Products").UpdateOne(filter, update);
+                client.GetDatabase(dbName).GetCollection<Item>("Items").UpdateOne(filter, update);
 
                 var response = Request.CreateResponse(HttpStatusCode.OK);
 
@@ -299,20 +299,20 @@ namespace BeanSCeneWebAPI.Controllers
         }
 
         /// <summary>
-        /// method used to delete product from db
+        /// method used to delete Item from db
         /// takes ID
         /// </summary>
-        /// <param name="p"></param>
+        /// <param name="i"></param>
         /// <returns></returns>
         // DELETE api/<controller>/5
-        [Route("api/Products/{id}")]
+        [Route("api/Items/{id}")]
         public HttpResponseMessage Delete(int id)
         {
             try
             {
-                var collection = client.GetDatabase(dbName).GetCollection<Product>("Products");
+                var collection = client.GetDatabase(dbName).GetCollection<Item>("Items");
 
-                var filter = Builders<Product>.Filter.Eq("id",id);
+                var filter = Builders<Item>.Filter.Eq("id",id);
 
                 collection.DeleteOne(filter);
 

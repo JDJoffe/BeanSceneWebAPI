@@ -6,7 +6,7 @@ using System.Web;
 
 namespace BeanSCeneWebAPI.Models
 {
-    public class Product
+    public class Item
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
