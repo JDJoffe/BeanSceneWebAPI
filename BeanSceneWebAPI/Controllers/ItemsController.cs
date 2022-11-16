@@ -18,7 +18,7 @@ using System.Web.Helpers;
 namespace BeanSCeneWebAPI.Controllers
 {
     [BasicAuthentication]
-    //[EnableCors(origins:"*",headers:"*",methods:"*")]
+    [EnableCors(origins:"*",headers:"*",methods:"*")]
     public class ItemsController : ApiController
     {
         MongoClient client;
@@ -80,17 +80,19 @@ namespace BeanSCeneWebAPI.Controllers
 
         // POST api/<controller>
         //{name}/{price}/{stock}/{description}/{brand}/{category}/{imageUrl}
-        [Route("api/Items/{name}/{price}/{description}/{category}/{imageUrl}")]
-        public HttpResponseMessage Post( string name, string price, string description, string category, string imageUrl)
+        [Route("api/Items/{name}/{description}/{dietary}/{price}/{category}/{imageUrl}/{availability}")]
+        public HttpResponseMessage Post(string name, string description, string dietary, string price, string category, string imageUrl, string availability)
         {
             try
             {
                 Item i = new Item();             
-                i.name = name;
+                i.name = name;               
+                i.description = description; 
+                i.dietary = dietary;
                 i.price = price;
-                i.description = description;
                 i.category = category;
                 i.thumbnail = imageUrl;
+                i.availability = availability;
 
                 // returns the total count of items
                 int lastItemId =  client.GetDatabase(dbName).GetCollection<Item>("Items").AsQueryable().Count();
@@ -219,27 +221,31 @@ namespace BeanSCeneWebAPI.Controllers
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <param name="price"></param>
-        /// <param name="stock"></param>
         /// <param name="description"></param>
+        /// <param name="dietary"></param>
         /// <param name="imageUrl"></param>
+        /// <param name="availability"></param>
         /// <returns></returns>
-        [Route("api/Items/{id}/{name}/{price}/{description}/{imageUrl}")]
-        public HttpResponseMessage Put(string id, string name, string price, string description, string imageUrl)
+        [Route("api/Items/{id}/{name}/{description}/{dietary}/{price}/{category}/{imageUrl}/{availability}")]
+        public HttpResponseMessage Put(string id, string name,  string description, string dietary,string price,string category, string imageUrl, string availability)
         {
 
             try
             {
                 Item i = new Item();
                 i.id = id;
-                i.name = name;
-                i.price = price;
+                i.name = name;                
                 i.description = description;
+                i.dietary = dietary;
+                i.price = price;
+                i.category = category;
                 i.thumbnail = imageUrl;
+                i.availability = availability;
 
 
 
                 var filter = Builders<Item>.Filter.Eq("id", i.id);
-                var update = Builders<Item>.Update.Set("name", i.name).Set("price", i.price).Set("description", i.description).Set("thumbnail", i.thumbnail);
+                var update = Builders<Item>.Update.Set("name", i.name).Set("description", i.description).Set("dietary", i.dietary).Set("price", i.price).Set("category", i.category).Set("thumbnail", i.thumbnail).Set("availability", i.availability);
 
                 client.GetDatabase(dbName).GetCollection<Item>("Items").UpdateOne(filter, update);
 
@@ -272,7 +278,7 @@ namespace BeanSCeneWebAPI.Controllers
             {
 
                 var filter = Builders<Item>.Filter.Eq("id", i.id);
-                var update = Builders<Item>.Update.Set("name", i.name).Set("price", i.price).Set("description", i.description).Set("thumbnail", i.thumbnail);
+                var update = Builders<Item>.Update.Set("name", i.name).Set("description", i.description).Set("dietary", i.dietary).Set("price", i.price).Set("category", i.category).Set("thumbnail", i.thumbnail).Set("availability", i.availability);
 
                 client.GetDatabase(dbName).GetCollection<Item>("Items").UpdateOne(filter, update);
 

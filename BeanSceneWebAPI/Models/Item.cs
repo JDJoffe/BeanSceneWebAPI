@@ -14,7 +14,7 @@ namespace BeanSCeneWebAPI.Models
         public string id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
-        public string Dietary { get; set; }
+        public string dietary { get; set; }
         public string price { get; set; }
         public string category { get; set; }
         public string thumbnail { get; set; }
