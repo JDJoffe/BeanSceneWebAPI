@@ -80,17 +80,15 @@ namespace BeanSCeneWebAPI.Controllers
 
         // POST api/<controller>
         //{name}/{price}/{stock}/{description}/{brand}/{category}/{imageUrl}
-        [Route("api/Items/{name}/{price}/{stock}/{description}/{brand}/{category}/{imageUrl}")]
-        public HttpResponseMessage Post( string name, string price, string stock, string description, string brand, string category, string imageUrl)
+        [Route("api/Items/{name}/{price}/{description}/{category}/{imageUrl}")]
+        public HttpResponseMessage Post( string name, string price, string description, string category, string imageUrl)
         {
             try
             {
                 Item i = new Item();             
                 i.name = name;
                 i.price = price;
-                i.stock = stock;
                 i.description = description;
-                i.brand = brand;
                 i.category = category;
                 i.thumbnail = imageUrl;
 
@@ -225,8 +223,8 @@ namespace BeanSCeneWebAPI.Controllers
         /// <param name="description"></param>
         /// <param name="imageUrl"></param>
         /// <returns></returns>
-        [Route("api/Items/{id}/{name}/{price}/{stock}/{description}/{imageUrl}")]
-        public HttpResponseMessage Put(string id, string name, string price, string stock, string description, string imageUrl)
+        [Route("api/Items/{id}/{name}/{price}/{description}/{imageUrl}")]
+        public HttpResponseMessage Put(string id, string name, string price, string description, string imageUrl)
         {
 
             try
@@ -235,14 +233,13 @@ namespace BeanSCeneWebAPI.Controllers
                 i.id = id;
                 i.name = name;
                 i.price = price;
-                i.stock = stock;
                 i.description = description;
                 i.thumbnail = imageUrl;
 
 
 
                 var filter = Builders<Item>.Filter.Eq("id", i.id);
-                var update = Builders<Item>.Update.Set("name", i.name).Set("price", i.price).Set("stock", i.stock).Set("description", i.description).Set("thumbnail", i.thumbnail);
+                var update = Builders<Item>.Update.Set("name", i.name).Set("price", i.price).Set("description", i.description).Set("thumbnail", i.thumbnail);
 
                 client.GetDatabase(dbName).GetCollection<Item>("Items").UpdateOne(filter, update);
 
@@ -275,7 +272,7 @@ namespace BeanSCeneWebAPI.Controllers
             {
 
                 var filter = Builders<Item>.Filter.Eq("id", i.id);
-                var update = Builders<Item>.Update.Set("name", i.name).Set("price", i.price).Set("stock", i.stock).Set("description", i.description).Set("thumbnail", i.thumbnail);
+                var update = Builders<Item>.Update.Set("name", i.name).Set("price", i.price).Set("description", i.description).Set("thumbnail", i.thumbnail);
 
                 client.GetDatabase(dbName).GetCollection<Item>("Items").UpdateOne(filter, update);
 
