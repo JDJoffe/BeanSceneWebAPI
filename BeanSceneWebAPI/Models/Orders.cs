@@ -15,14 +15,13 @@ namespace BeanSCeneWebAPI.Models
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string _id { get; set; }
         public string id { get; set; }
-        public string TableId { get; set; }
-        public Table Table { get; set; }
-        public string[] ItemIds { get; set; }
-        public Item[] Items { get; set; }      
-        public string[] Dierary { get; set; }
-        public string[] Requests { get; set; }
-        public BsonDateTime Date { get; set; }
-        public BsonDateTime Time { get; set; }
+        //public string name { get; set; }
+        public string Table { get; set; }
+        public BsonDocument Items { get; set; }   
+        public BsonDocument Dietary { get; set; }
+        public BsonDocument Requests { get; set; }
+        public string Date { get; set; }
+        public string Time { get; set; }
         public string Status { get; set; }      
         public string Notes { get; set; }
     }
