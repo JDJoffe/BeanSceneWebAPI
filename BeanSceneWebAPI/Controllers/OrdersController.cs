@@ -82,8 +82,8 @@ namespace BeanSCeneWebAPI.Controllers
 
         // POST api/<controller>
         //{name}/{price}/{stock}/{description}/{brand}/{category}/{imageUrl}
-        [Route("api/Orders/{Table}/{Items}/{Dietary}/{Requests}/{Date}/{Time}/{Status}/{Notes}")]
-        public HttpResponseMessage Post(string Table, string[] itemId, string[] dietary, string[] requests, string date, string time, string status, string notes)
+        [Route("api/Orders/{Table}/{Items}/{Dietary}/{Requests}/{Date}/{Time}/{Status}/{Notes}/{Cost}")]
+        public HttpResponseMessage Post(string Table, string[] itemId, string[] dietary, string[] requests, string date, string time, string status, string notes, string cost)
         {
             try
             {
@@ -104,8 +104,8 @@ namespace BeanSCeneWebAPI.Controllers
                 o.Date = date;
                 o.Time =  time;
                 o.Status = status;
-                o.Notes = notes;             
-                
+                o.Notes = notes;
+                o.Cost = cost;
                 // returns the total count of items
                 int lastItemId = client.GetDatabase(dbName).GetCollection<Orders>("Orders").AsQueryable().Count();
                 // returns the last item's id and parses to int
@@ -225,21 +225,22 @@ namespace BeanSCeneWebAPI.Controllers
         //        return response;
         //    }
         //}
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="id"></param>
-       /// <param name="Table"></param>
-       /// <param name="itemId"></param>
-       /// <param name="dietary"></param>
-       /// <param name="requests"></param>
-       /// <param name="date"></param>
-       /// <param name="time"></param>
-       /// <param name="status"></param>
-       /// <param name="notes"></param>
-       /// <returns></returns>
-        [Route("api/Orders/{Id}/{Table}/{Items}/{Dietary}/{Requests}/{Date}/{Time}/{Status}/{Notes}")]
-        public HttpResponseMessage put(string id,string Table, string[] itemId, string[] dietary, string[] requests, string date, string time, string status, string notes)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Table"></param>
+        /// <param name="itemId"></param>
+        /// <param name="dietary"></param>
+        /// <param name="requests"></param>
+        /// <param name="date"></param>
+        /// <param name="time"></param>
+        /// <param name="status"></param>
+        /// <param name="notes"></param>
+        /// <param name="cost"></param>
+        /// <returns></returns>
+        [Route("api/Orders/{Id}/{Table}/{Items}/{Dietary}/{Requests}/{Date}/{Time}/{Status}/{Notes}/{Cost}")]
+        public HttpResponseMessage put(string id,string Table, string[] itemId, string[] dietary, string[] requests, string date, string time, string status, string notes, string cost)
         {
             try
             {
@@ -262,11 +263,11 @@ namespace BeanSCeneWebAPI.Controllers
                 o.Time = time;
                 o.Status = status;
                 o.Notes = notes;
-
+                o.Cost = cost;
 
 
                 var filter = Builders<Orders>.Filter.Eq("id", o.id);
-                var update = Builders<Orders>.Update.Set("Table", o.Table).Set("Items", o.Items).Set("Dietary", o.Dietary).Set("Requests", o.Requests).Set("Date", o.Date).Set("Time", o.Time).Set("Status", o.Status).Set("Notes", o.Notes);
+                var update = Builders<Orders>.Update.Set("Table", o.Table).Set("Items", o.Items).Set("Dietary", o.Dietary).Set("Requests", o.Requests).Set("Date", o.Date).Set("Time", o.Time).Set("Status", o.Status).Set("Notes", o.Notes).Set("Cost",o.Cost);
 
                 client.GetDatabase(dbName).GetCollection<Orders>("Orders").UpdateOne(filter, update);
 
@@ -274,7 +275,7 @@ namespace BeanSCeneWebAPI.Controllers
 
                 var jObject = new JObject();
                 response.Content = new StringContent(jObject.ToString(), Encoding.UTF8, "application/json");
-
+                
                 return response;
 
             }
@@ -299,7 +300,7 @@ namespace BeanSCeneWebAPI.Controllers
             {
 
                 var filter = Builders<Orders>.Filter.Eq("id", o.id);
-                var update = Builders<Orders>.Update.Set("Table", o.Table).Set("Items", o.Items).Set("Dietary", o.Dietary).Set("Requests", o.Requests).Set("Date", o.Date).Set("Time", o.Time).Set("Status", o.Status).Set("Notes", o.Notes);
+                var update = Builders<Orders>.Update.Set("Table", o.Table).Set("Items", o.Items).Set("Dietary", o.Dietary).Set("Requests", o.Requests).Set("Date", o.Date).Set("Time", o.Time).Set("Status", o.Status).Set("Notes", o.Notes).Set("Cost",o.Cost);
 
                 client.GetDatabase(dbName).GetCollection<Orders>("Orders").UpdateOne(filter, update);
 

@@ -24,5 +24,6 @@ namespace BeanSCeneWebAPI.Models
         public string Time { get; set; }
         public string Status { get; set; }      
         public string Notes { get; set; }
+        public string Cost { get; set; }
     }
 }

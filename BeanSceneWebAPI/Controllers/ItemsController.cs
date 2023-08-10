@@ -10,10 +10,10 @@ using BeanSCeneWebAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
-using System.Web.Http.Cors;
 using System.Web;
-using System.Drawing.Drawing2D;
 using System.Web.Helpers;
+using System.Drawing.Drawing2D;
+using System.Web.Http.Cors;
 
 namespace BeanSCeneWebAPI.Controllers
 {
@@ -268,38 +268,38 @@ namespace BeanSCeneWebAPI.Controllers
             }
         }
 
-      
+
         //updating Item by passing Item object
-        [Route("api/Items/updateItem")]
-        public HttpResponseMessage updateItem([FromBody] Item i)
-        {
+        //[Route("api/Items/updateItem")]
+        //public HttpResponseMessage updateItem([FromBody] Item i)
+        //{
 
-            try
-            {
+        //    try
+        //    {
 
-                var filter = Builders<Item>.Filter.Eq("id", i.id);
-                var update = Builders<Item>.Update.Set("name", i.name).Set("description", i.description).Set("dietary", i.dietary).Set("price", i.price).Set("category", i.category).Set("thumbnail", i.thumbnail).Set("availability", i.availability);
+        //        var filter = Builders<Item>.Filter.Eq("id", i.id);
+        //        var update = Builders<Item>.Update.Set("name", i.name).Set("description", i.description).Set("dietary", i.dietary).Set("price", i.price).Set("category", i.category).Set("thumbnail", i.thumbnail).Set("availability", i.availability);
 
-                client.GetDatabase(dbName).GetCollection<Item>("Items").UpdateOne(filter, update);
+        //        client.GetDatabase(dbName).GetCollection<Item>("Items").UpdateOne(filter, update);
 
-                var response = Request.CreateResponse(HttpStatusCode.OK);
+        //        var response = Request.CreateResponse(HttpStatusCode.OK);
 
-                var jObject = new JObject();
-                response.Content = new StringContent(jObject.ToString(), Encoding.UTF8, "application/json");
+        //        var jObject = new JObject();
+        //        response.Content = new StringContent(jObject.ToString(), Encoding.UTF8, "application/json");
 
-                return response;
+        //        return response;
 
-            }
-            catch (Exception ex)
-            {
-                var response = Request.CreateResponse(HttpStatusCode.BadRequest);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var response = Request.CreateResponse(HttpStatusCode.BadRequest);
 
-                var jObject = new JObject();
-                response.Content = new StringContent(jObject.ToString(), Encoding.UTF8, "application/json");
+        //        var jObject = new JObject();
+        //        response.Content = new StringContent(jObject.ToString(), Encoding.UTF8, "application/json");
 
-                return response;
-            }
-        }
+        //        return response;
+        //    }
+        //}
 
         /// <summary>
         /// method used to delete Item from db

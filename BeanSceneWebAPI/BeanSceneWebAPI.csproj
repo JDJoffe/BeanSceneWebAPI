@@ -243,6 +243,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="BasicAuthenticationAttribute.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
@@ -253,6 +254,7 @@
     </Compile>
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Orders.cs" />
+    <Compile Include="Models\Reports.cs" />
     <Compile Include="Models\Staff.cs" />
     <Compile Include="Models\Tables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

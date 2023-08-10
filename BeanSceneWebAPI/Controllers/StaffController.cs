@@ -10,12 +10,17 @@ using BeanSCeneWebAPI.Models;
 using Newtonsoft.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using System.Web;
 using System.Web.Helpers;
+using System.Drawing.Drawing2D;
+using System.Web.Http.Cors;
 using BCrypt.Net;
+
 
 namespace BeanSCeneWebAPI.Controllers
 {
     [BasicAuthentication]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class StaffController : ApiController
     {
         MongoClient client;
@@ -44,6 +49,7 @@ namespace BeanSCeneWebAPI.Controllers
         [Route("api/Staff/{username}/{password}")]
         public HttpResponseMessage Get (string username,string password)
         {
+            #region
             // without hashing
             //var collection = client.GetDatabase(dbName).GetCollection<Staff>("Staff");
 
@@ -52,7 +58,7 @@ namespace BeanSCeneWebAPI.Controllers
             //var response = Request.CreateResponse(HttpStatusCode.OK);
             //response.Content = new StringContent(jsonResult, Encoding.UTF8, "application/json");
             //return response;
-
+            #endregion
             // with hashing
             var collection = client.GetDatabase(dbName).GetCollection<Staff>("Staff");
 
@@ -78,6 +84,7 @@ namespace BeanSCeneWebAPI.Controllers
             string jsonResult = JsonConvert.SerializeObject(result);
             var response = Request.CreateResponse(HttpStatusCode.OK);
             response.Content = new StringContent(jsonResult, Encoding.UTF8, "application/json");
+            
             return response;
 
         }
@@ -213,8 +220,9 @@ namespace BeanSCeneWebAPI.Controllers
                 var response = Request.CreateResponse(HttpStatusCode.OK);
 
                 var jObject = new JObject();
+               // response.Headers.Append('Access-Control-Allow-Origin', '*', );
                 response.Content = new StringContent(jObject.ToString(), Encoding.UTF8, "application/json");
-
+                
 
 
                 return response;
